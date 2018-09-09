@@ -92,7 +92,33 @@ def depthFirstSearch(problem):
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    root = problem.getStartState()
+    node = dict()
+    visited_list = []
+    action = []
+    stack = util.Stack()    # Initialize Stack
+    node["0"] = root        # root or start state
+    node["1"] = None        # path
+    node["2"] = None        # parent
+    stack.push(node)        # state,path,parent
+    while not stack.isEmpty():  # Traverse till there are no elements left in the stack
+        node = stack.pop()        # Retrieve first element
+        location = node["0"]
+        if problem.isGoalState(location):
+            break
+        if location not in visited_list:
+            visited_list.append(location)           # Add location to list of visited nodes
+            for x, y, z in problem.getSuccessors(location):  # x=location, y=path, z=parent
+                if x not in visited_list:
+                    nn = dict()
+                    nn["0"] = x
+                    nn["1"] = y
+                    nn["2"] = node
+                    stack.push(nn)
+    while node["1"] is not None:
+        action.insert(0, node["1"])  # Print the path
+        node = node["2"]  # Make parent node the next node
+    return action
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
