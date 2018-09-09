@@ -87,7 +87,7 @@ def depthFirstSearch(problem):
     print "Start's successors:", problem.getSuccessors(problem.getStartState())
     """
     "*** YOUR CODE HERE ***"
-        root = problem.getStartState()
+    root = problem.getStartState()
     node = dict()
     visited_list = []
     action = []
@@ -122,13 +122,13 @@ def breadthFirstSearch(problem):
     node = dict()
     visited_list = []
     action = []
-    stack = util.Stack()    # Initialize Stack
+    queue = util.Queue()    # Initialize Stack
     node["0"] = root        # root or start state
     node["1"] = None        # path
     node["2"] = None        # parent
-    stack.push(node)        # state,path,parent
-    while not stack.isEmpty():  # Traverse till there are no elements left in the stack
-        node = stack.pop()        # Retrieve first element
+    queue.push(node)        # state,path,parent
+    while not queue.isEmpty():  # Traverse till there are no elements left in the queue
+        node = queue.pop()        # Retrieve first element
         location = node["0"]
         if problem.isGoalState(location):
             break
@@ -140,9 +140,9 @@ def breadthFirstSearch(problem):
                     nn["0"] = x
                     nn["1"] = y
                     nn["2"] = node
-                    stack.push(nn)
+                    queue.push(nn)
     while node["1"] is not None:
-        action.insert(0, node["1"])  # Print the path
+        action.insert(0, node["1"])  # To print the path
         node = node["2"]  # Make parent node the next node
     return action
 
