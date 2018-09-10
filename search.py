@@ -143,7 +143,7 @@ def breadthFirstSearch(problem):
                     queue.push(nn)
     while node["1"] is not None:
         action.insert(0, node["1"])  # To print the path
-        node = node["2"]  # Make parent node the next node
+        node = node["2"]   # Make parent node the next node
     return action
 
 def uniformCostSearch(problem):
