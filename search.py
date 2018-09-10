@@ -189,7 +189,39 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    node = dict()
+    root = problem.getStartState()
+    visited_list = []
+    action = []
+    pQueue = util.PriorityQueue()
+    node["0"] = root
+    node["1"] = None
+    node["2"] = None
+    node["3"] = 0
+    node["4"] = heuristic(node["0"], problem)  # heuristic used to calculate actual distance from goal
+    pQueue.push(node, node["3"] + node["4"])  # state,path,parent,cost,heuristic(push values onto the PriorityQueue)
+    while not pQueue.isEmpty():
+        node = pQueue.pop()
+        location = node["0"]
+        if problem.isGoalState(location):
+            break                          # Goal State reached break
+        if location not in visited_list:
+            visited_list.append(location)
+            for x, y, z in problem.getSuccessors(location):
+                if x not in visited_list:
+                    nn = dict()
+                    nn["0"] = x
+                    nn["1"] = y
+                    nn["2"] = node
+                    nn["3"] = z + node["3"]  # update cost
+                    nn["4"] = heuristic(x, problem)  # update heuristic
+                    pQueue.push(nn, nn["3"] + nn["4"])
+
+    while node["1"] is not None:
+        action.insert(0, node["1"])
+        node = node["2"]                # Make parent node the next node
+    return action
+
 
 
 # Abbreviations
