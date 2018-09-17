@@ -4,7 +4,7 @@
 # educational purposes provided that (1) you do not distribute or publish
 # solutions, (2) you retain this notice, and (3) you provide clear
 # attribution to UC Berkeley, including a link to http://ai.berkeley.edu.
-# 
+#
 # Attribution Information: The Pacman AI projects were developed at UC Berkeley.
 # The core projects and autograders were primarily created by John DeNero
 # (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
@@ -288,6 +288,7 @@ class CornersProblem(search.SearchProblem):
         # Please add any code here which you would like to use
         # in initializing the problem
         "*** YOUR CODE HERE ***"
+        self.c = [(1, 1), (1, top), (right, 1), (right, top)]  # Creating list of corners
 
     def getStartState(self):
         """
@@ -295,14 +296,16 @@ class CornersProblem(search.SearchProblem):
         space)
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        return self.startingPosition, self.c  # taking corners with current position other wise it will always get initialize with all corners
 
     def isGoalState(self, state):
         """
         Returns whether this search state is a goal state of the problem.
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        if len(state[1]) == 0:   # If corner list is empty then all the corners has been visited(Goal_State)
+            return True
+        return False
 
     def getSuccessors(self, state):
         """
@@ -325,9 +328,20 @@ class CornersProblem(search.SearchProblem):
             #   hitsWall = self.walls[nextx][nexty]
 
             "*** YOUR CODE HERE ***"
-
-        self._expanded += 1 # DO NOT CHANGE
+            x, y = state[0]
+            corners_to_be_visited = list(state[1])
+            dx, dy = Actions.directionToVector(action)
+            nextx, nexty = int(x + dx), int(y + dy)  # Getting next state
+            if self.walls[nextx][nexty] is False:  # If next state is not wall
+                nextfood = (nextx, nexty)
+                if nextfood in corners_to_be_visited:  # If new state is visiting state then remove it from teh list of corners created
+                    corners_to_be_visited.remove(nextfood)
+                nextfood = (nextfood,
+                            corners_to_be_visited)  # Now in previous step new state was in corners than this c will have less than original corners else will have the same corners
+                successors.append((nextfood, action, 1))  # Appending in the successors
+        self._expanded += 1  # DO NOT CHANGE
         return successors
+
 
     def getCostOfActions(self, actions):
         """
