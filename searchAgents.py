@@ -471,7 +471,20 @@ def foodHeuristic(state, problem):
     """
     position, foodGrid = state
     "*** YOUR CODE HERE ***"
-    return 0
+    food_positions = foodGrid.asList()   # Store food co-ordinates as a list
+    manhattan = []  # Initialize empty list for manhattan distances
+    if problem.isGoalState(state):  # Heuristic for goal state is zero
+        return 0
+    for food in food_positions:
+        result = PositionSearchProblem(problem.startingGameState, start=position, goal=food, warn=False, visualize=True)
+        # Calculate search path from position to every food using BFS
+        dist = len(search.breadthFirstSearch(result))  #BFS returns a path so value returned will be distance that path
+        # dist = len(search.aStarSearch(result))
+        # dist = len(search.depthFirstSearch(result))
+        # dist = len(search.uniformCostSearch(result))
+        # In above step  we can perform search by astar ,DFS or uniform cost as commented above
+        manhattan.append(dist)
+    return max(manhattan)  # Heuristic will be the maximum of all distances calculated
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
